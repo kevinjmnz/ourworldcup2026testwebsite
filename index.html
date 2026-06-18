@@ -1,1 +1,717 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>Quiniela Mundial 2026 · Fase de Grupos</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/tabler-icons.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;background:linear-gradient(160deg,#0a1628 0%,#1a3a5c 50%,#0f2340 100%);min-height:100vh;color:#fff;font-size:16px}
+    .app{max-width:100%;margin:0 auto;padding:0 0 80px}
+    .header{background:linear-gradient(135deg,#c9a227 0%,#e8c547 50%,#c9a227 100%);padding:12px 16px;text-align:center}
+    .header h1{font-size:20px;font-weight:700;color:#0a1628;letter-spacing:1px;text-transform:uppercase}
+    .header p{font-size:11px;color:#0a1628cc;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+    .header-actions{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+    .header-actions button{background:rgba(10,22,40,0.2);border:1px solid rgba(10,22,40,0.3);color:#0a1628;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;font-weight:600}
+    .header-actions button:hover{background:rgba(10,22,40,0.4)}
+    .ball-icon{font-size:28px;display:block;margin-bottom:4px}
+    .search-wrap{padding:12px 12px 6px;position:relative}
+    .search-wrap input{width:100%;padding:12px 16px 12px 46px;font-size:16px;border-radius:30px;border:none;background:rgba(255,255,255,0.15);color:#fff;outline:none}
+    .search-wrap input::placeholder{color:rgba(255,255,255,0.7)}
+    .search-wrap .si{position:absolute;left:24px;top:50%;transform:translateY(-50%);font-size:22px;color:rgba(255,255,255,0.8)}
+    .section-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);padding:14px 14px 6px}
+    .podium-section{margin:6px 12px 0;background:rgba(255,255,255,0.07);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.15)}
+    .podium-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;user-select:none}
+    .podium-label{font-size:13px;font-weight:700;color:#e8c547;text-transform:uppercase;letter-spacing:1px}
+    .podium-body{padding:0 12px 14px;display:none}
+    .podium-body.open{display:block}
+    .podium-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;margin-bottom:6px;cursor:pointer}
+    .podium-row:active{opacity:0.7}
+    .podium-rank{font-size:26px;width:40px;text-align:center;flex-shrink:0}
+    .podium-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,0.3)}
+    .podium-info{flex:1;min-width:0}
+    .podium-name{font-size:16px;font-weight:600}
+    .podium-pts{font-size:12px;color:rgba(255,255,255,0.7)}
+    .podium-badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:30px;flex-shrink:0}
+    .gold-row{background:linear-gradient(90deg,rgba(201,162,39,0.35),rgba(201,162,39,0.1))}
+    .silver-row{background:linear-gradient(90deg,rgba(180,180,190,0.3),rgba(180,180,190,0.08))}
+    .bronze-row{background:linear-gradient(90deg,rgba(176,107,60,0.35),rgba(176,107,60,0.1))}
+    .other-row{background:rgba(255,255,255,0.05)}
+    .gold-badge{background:#c9a227;color:#0a1628}
+    .silver-badge{background:#b4b4c0;color:#1a1a2e}
+    .bronze-badge{background:#b06b3c;color:#fff}
+    .cards-section{padding:8px 12px 0}
+    .player-card{background:rgba(255,255,255,0.1);border-radius:20px;margin-bottom:10px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.1)}
+    .player-card:active{background:rgba(255,255,255,0.2)}
+    .rank-num{font-size:20px;font-weight:700;width:36px;text-align:center;color:rgba(255,255,255,0.6);flex-shrink:0}
+    .rank-num.top3{color:#e8c547}
+    .avatar{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,0.2)}
+    .card-info{flex:1}
+    .card-name{font-size:17px;font-weight:700}
+    .card-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px}
+    .view-btn{margin-top:8px;background:rgba(255,255,255,0.12);border:none;color:#fff;border-radius:40px;padding:6px 12px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    .card-right{text-align:right;flex-shrink:0}
+    .pts-big{font-size:28px;font-weight:800;color:#e8c547;line-height:1}
+    .pts-label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px}
+    .standings-table{width:100%;border-collapse:collapse;margin-top:8px;background:rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;font-size:13px}
+    .standings-table th,.standings-table td{padding:10px 4px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1)}
+    .standings-table th{background:rgba(0,0,0,0.4);color:#e8c547;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:12px}
+    .standings-table td:first-child,.standings-table th:first-child{width:40px}
+    .standings-table td:nth-child(2){text-align:left;font-weight:600}
+    .standings-table tr{cursor:pointer}
+    .standings-table tr:hover{background:rgba(255,255,255,0.12)}
+    .table-rank-1{background:rgba(201,162,39,0.25)}
+    .table-rank-2{background:rgba(180,180,190,0.2)}
+    .table-rank-3{background:rgba(176,107,60,0.2)}
+    .table-pts{font-weight:800;color:#e8c547;font-size:16px}
+    .matrix-wrapper{overflow:auto;margin:12px 12px 0;background:rgba(255,255,255,0.06);border-radius:20px;padding:0;max-height:500px}
+    .matrix-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:700px}
+    .matrix-table th,.matrix-table td{padding:8px 4px;text-align:center;border:1px solid rgba(255,255,255,0.1);vertical-align:middle;white-space:nowrap}
+    .matrix-table thead th{position:sticky;top:0;z-index:10;background:#0f2340;color:#e8c547;font-weight:700;font-size:11px;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+    .matrix-table .sticky-col{position:sticky;left:0;z-index:5;background:#0f2340;font-weight:700;text-align:left;min-width:100px;max-width:100px;border-right:2px solid rgba(201,162,39,0.3)}
+    .matrix-table thead .sticky-col{z-index:15;background:#0a1a2f;border-right:2px solid rgba(201,162,39,0.5)}
+    .matrix-table .sticky-col:hover{background:rgba(255,255,255,0.1)}
+    .matrix-pred-L{background:#22c55e30;color:#86efac}
+    .matrix-pred-E{background:#eab30830;color:#fde047}
+    .matrix-pred-V{background:#f9731630;color:#fdba74}
+    .matrix-pred-none{background:rgba(255,255,255,0.05);color:#9ca3af}
+    .participant-row{cursor:pointer}
+    .participant-row:hover{background:rgba(255,255,255,0.08)}
+    .participant-row:hover .sticky-col{background:rgba(255,255,255,0.12)}
+    .scroll-hint{text-align:center;font-size:11px;color:rgba(255,255,255,0.5);padding:4px 0;letter-spacing:1px}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:30px;margin:8px 12px 0;font-size:12px;font-weight:500}
+    .legend span{display:inline-flex;align-items:center;gap:4px}
+    .legend .box{display:inline-block;width:18px;height:18px;border-radius:4px}
+    .filter-row{display:flex;gap:6px;padding:8px 12px 2px;overflow-x:auto;flex-wrap:wrap}
+    .filter-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);border-radius:30px;padding:6px 14px;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .filter-btn.active{background:#c9a227;color:#0a1628;border-color:#c9a227;font-weight:700}
+    .jornada-filter-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border-radius:30px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap}
+    .jornada-filter-btn.active{background:rgba(201,162,39,0.3);color:#e8c547;border-color:#c9a227}
+    .fullscreen-btn{background:rgba(201,162,39,0.2);border:1px solid rgba(201,162,39,0.4);color:#e8c547;border-radius:30px;padding:4px 10px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    .games-badge{font-size:11px;background:rgba(255,255,255,0.15);color:#ddd;border-radius:30px;padding:3px 10px;margin-left:6px}
+    .group-badge{font-size:9px;background:rgba(0,0,0,0.5);border-radius:16px;padding:2px 6px;margin-left:6px;font-weight:400}
+    .editor-panel{background:rgba(255,255,255,0.05);border-radius:20px;padding:12px;margin:6px 12px;border:1px solid rgba(201,162,39,0.2)}
+    .editor-panel.hidden{display:none}
+    .editor-panel select,.editor-panel button{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:8px 14px;font-size:13px;cursor:pointer}
+    .editor-panel select option{background:#0f2340;color:#fff}
+    .editor-panel .btn-update{background:#c9a227;color:#0a1628;font-weight:700;border-color:#c9a227}
+    .editor-panel .btn-update:hover{background:#e8c547}
+    .editor-panel .btn-close{background:#dc2626;color:#fff;border-color:#dc2626}
+    .editor-panel .btn-close:hover{background:#b91c1c}
+    .editor-panel .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;display:none;align-items:flex-end;justify-content:center;touch-action:pan-y}
+    .modal-overlay.open{display:flex}
+    .modal-sheet{background:#0f2340;border-radius:28px 28px 0 0;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:0 0 20px;touch-action:pan-y;position:relative}
+    .modal-handle{width:50px;height:5px;background:rgba(255,255,255,0.3);border-radius:4px;margin:12px auto;cursor:grab}
+    .modal-handle:active{cursor:grabbing}
+    .modal-header{padding:4px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.1);position:relative}
+    .modal-title{font-size:19px;font-weight:800;padding-right:40px}
+    .modal-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-top:2px}
+    .modal-close{position:absolute;right:16px;top:8px;background:#dc2626;border:none;color:#fff;border-radius:50%;width:36px;height:36px;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+    .modal-close:active{background:#b91c1c}
+    .modal-body{padding:16px}
+    .close-bottom-btn{display:block;width:calc(100% - 32px);margin:16px auto 8px;background:#dc2626;border:none;color:#fff;border-radius:40px;padding:12px;font-size:15px;font-weight:600;text-align:center;cursor:pointer}
+    .close-bottom-btn:active{background:#b91c1c}
+    .jornada-title{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#e8c547;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(201,162,39,0.4)}
+    .jornada-title.current{background:rgba(201,162,39,0.15);padding:4px 8px;border-radius:8px}
+    .game-row{background:rgba(255,255,255,0.08);border-radius:16px;margin-bottom:8px;padding:10px 12px}
+    .game-teams{font-size:14px;font-weight:700;margin-bottom:8px}
+    .game-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .pick-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px;text-transform:uppercase}
+    .pick-val{font-size:13px;font-weight:700;padding:6px;border-radius:10px;text-align:center}
+    .pick-correct{background:#22c55e30;color:#86efac;border:1px solid #22c55e60}
+    .pick-wrong{background:#ef444430;color:#fca5a5;border:1px solid #ef444460}
+    .pick-pending{background:rgba(255,255,255,0.08);color:#ccc;border:1px solid rgba(255,255,255,0.15)}
+    .result-badge{font-size:11px;padding:3px 10px;border-radius:16px;font-weight:700;display:inline-block;margin-top:6px}
+    .res-correct{background:#166534;color:#86efac}
+    .res-wrong{background:#7f1d1d;color:#fca5a5}
+    .res-pending{background:rgba(255,255,255,0.1);color:#aaa}
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+    .stat-box{background:rgba(255,255,255,0.08);border-radius:16px;padding:10px;text-align:center}
+    .stat-num{font-size:26px;font-weight:800}
+    .stat-lbl{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-top:2px}
+    .no-results{text-align:center;color:rgba(255,255,255,0.5);padding:30px;font-size:15px}
+    .export-btn{background:rgba(201,162,39,0.2);border:1px solid rgba(201,162,39,0.4);color:#e8c547;border-radius:30px;padding:4px 12px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    .btn-toggle-editor{background:rgba(201,162,39,0.15);border:1px solid rgba(201,162,39,0.3);color:#e8c547;border-radius:30px;padding:4px 12px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    @media(max-width:480px){.filter-row{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <span class="ball-icon">⚽</span>
+    <h1>Quiniela 2026</h1>
+    <p>Copa del Mundo · Fase de Grupos · $20</p>
+    <div class="header-actions">
+      <button class="btn-toggle-editor" id="toggleEditorBtn">⚙️ Editar Resultados</button>
+      <button class="export-btn" id="exportPdfBtn">📄 Exportar PDF</button>
+    </div>
+  </div>
 
+  <div id="editorPanel" class="editor-panel hidden">
+    <div class="row">
+      <select id="matchSelect" style="flex:1;min-width:150px;"></select>
+      <select id="resultSelect">
+        <option value="">Seleccionar</option>
+        <option value="L">🏠 Local (L)</option>
+        <option value="E">🤝 Empate (E)</option>
+        <option value="V">✈️ Visita (V)</option>
+        <option value="clear">🗑️ Borrar resultado</option>
+      </select>
+      <button class="btn-update" id="updateResultBtn">Actualizar</button>
+      <button class="btn-close" id="closeEditorBtn">✕</button>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:6px">Los cambios son temporales (se pierden al recargar).</div>
+  </div>
+
+  <div class="search-wrap">
+    <i class="ti ti-search si"></i>
+    <input type="text" id="searchInput" placeholder="Buscar participante..." autocomplete="off">
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" data-view="cards">🃏 Tarjetas</button>
+    <button class="filter-btn" data-view="table">🏆 Líderes</button>
+    <button class="filter-btn" data-view="matrix">📊 La Tabla</button>
+  </div>
+
+  <div class="filter-row" id="jornadaFilters" style="display:none;">
+    <button class="jornada-filter-btn active" data-jornada="all">Todas</button>
+    <button class="jornada-filter-btn" data-jornada="0">Jornada 1</button>
+    <button class="jornada-filter-btn" data-jornada="1">Jornada 2</button>
+    <button class="jornada-filter-btn" data-jornada="2">Jornada 3</button>
+  </div>
+
+  <div class="section-title">🏆 Podio</div>
+  <div class="podium-section">
+    <div class="podium-header">
+      <div><span class="podium-label">Clasificación</span><span class="games-badge" id="gamesPlayed"></span></div>
+      <div style="display:flex;gap:6px">
+        <button class="fullscreen-btn" id="fullPodiumBtn"><i class="ti ti-arrows-maximize"></i> Ampliar</button>
+        <button style="background:rgba(255,255,255,0.1);border:none;border-radius:30px;padding:3px 10px;cursor:pointer" id="podiumToggleBtn"><i class="ti ti-chevron-down" id="podiumChevron"></i></button>
+      </div>
+    </div>
+    <div class="podium-body open" id="podiumBody"><div id="podiumList"></div></div>
+  </div>
+
+  <div class="section-title">⚽ Quiniela Mundialista 2026 – Fase de Grupos</div>
+  <div id="cardsList" class="cards-section"></div>
+  <div id="tableView" class="cards-section" style="display:none;"></div>
+  <div id="matrixView" style="display:none;"></div>
+  <div class="no-results" id="noResults" style="display:none;">No se encontró ese participante 🔍</div>
+</div>
+
+<div class="modal-overlay" id="predictionsModal">
+  <div class="modal-sheet">
+    <div class="modal-handle" id="modalHandle"></div>
+    <div class="modal-header">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="modalAvatar" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin-bottom:10px"></div>
+      <div class="modal-title" id="modalName"></div>
+      <div class="modal-sub" id="modalSub"></div>
+    </div>
+    <div class="modal-body">
+      <div class="stats-row" id="modalStats"></div>
+      <div id="modalGames"></div>
+      <button class="close-bottom-btn" id="modalCloseBottom">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="fullPodiumModal"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-header"><button class="modal-close" id="fullPodiumClose">×</button><div class="modal-title">Clasificación Completa</div><div class="modal-sub" id="fullPodiumSub"></div></div><div class="modal-body" id="fullPodiumList"></div></div></div>
+
+<script>
+// ============================================================
+// DATOS DE PARTIDOS
+// ============================================================
+const JORNADAS = [
+  { label: "Jornada 1 · 11–17 Jun", games: [
+    { id:"j1g01", home:"México 🇲🇽", away:"Sudáfrica 🇿🇦", group:"A", result:"L" },
+    { id:"j1g02", home:"Corea del Sur 🇰🇷", away:"Chequia 🇨🇿", group:"A", result:"L" },
+    { id:"j1g03", home:"Canadá 🇨🇦", away:"Bosnia y Herzegovina 🇧🇦", group:"B", result:"E" },
+    { id:"j1g04", home:"EE.UU. 🇺🇸", away:"Paraguay 🇵🇾", group:"D", result:"L" },
+    { id:"j1g05", home:"Catar 🇶🇦", away:"Suiza 🇨🇭", group:"B", result:"E" },
+    { id:"j1g06", home:"Brasil 🇧🇷", away:"Marruecos 🇲🇦", group:"C", result:"E" },
+    { id:"j1g07", home:"Haití 🇭🇹", away:"Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿", group:"C", result:"V" },
+    { id:"j1g08", home:"Australia 🇦🇺", away:"Turquía 🇹🇷", group:"D", result:"L" },
+    { id:"j1g09", home:"Alemania 🇩🇪", away:"Curazao 🇨🇼", group:"E", result:"L" },
+    { id:"j1g10", home:"Países Bajos 🇳🇱", away:"Japón 🇯🇵", group:"F", result:"E" },
+    { id:"j1g11", home:"Costa de Marfil 🇨🇮", away:"Ecuador 🇪🇨", group:"E", result:"L" },
+    { id:"j1g12", home:"Suecia 🇸🇪", away:"Túnez 🇹🇳", group:"F", result:"L" },
+    { id:"j1g13", home:"España 🇪🇸", away:"Cabo Verde 🇨🇻", group:"H", result:"E" },
+    { id:"j1g14", home:"Bélgica 🇧🇪", away:"Egipto 🇪🇬", group:"G", result:"E" },
+    { id:"j1g15", home:"Arabia Saudita 🇸🇦", away:"Uruguay 🇺🇾", group:"H", result:"E" },
+    { id:"j1g16", home:"Irán 🇮🇷", away:"Nueva Zelanda 🇳🇿", group:"G", result:"E" },
+    { id:"j1g17", home:"Francia 🇫🇷", away:"Senegal 🇸🇳", group:"I", result:"L" },
+    { id:"j1g18", home:"Irak 🇮🇶", away:"Noruega 🇳🇴", group:"I", result:"V" },
+    { id:"j1g19", home:"Argentina 🇦🇷", away:"Argelia 🇩🇿", group:"J", result:"L" },
+    { id:"j1g20", home:"Austria 🇦🇹", away:"Jordania 🇯🇴", group:"J", result:"L" },
+    { id:"j1g21", home:"Portugal 🇵🇹", away:"Congo RD 🇨🇩", group:"K", result:"E" },
+    { id:"j1g22", home:"Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", away:"Croacia 🇭🇷", group:"L", result:"L" },
+    { id:"j1g23", home:"Ghana 🇬🇭", away:"Panamá 🇵🇦", group:"L", result:"L" },
+    { id:"j1g24", home:"Uzbekistán 🇺🇿", away:"Colombia 🇨🇴", group:"K", result:"V" }
+  ] },
+  { label: "Jornada 2 · 18–23 Jun", games: [
+    { id:"j2g01", home:"Chequia 🇨🇿", away:"Sudáfrica 🇿🇦", group:"A", result:"E" }, { id:"j2g02", home:"Suiza 🇨🇭", away:"Bosnia y Herzegovina 🇧🇦", group:"B", result:null },
+    { id:"j2g03", home:"Canadá 🇨🇦", away:"Catar 🇶🇦", group:"B", result:null }, { id:"j2g04", home:"México 🇲🇽", away:"Corea del Sur 🇰🇷", group:"A", result:null },
+    { id:"j2g05", home:"EE.UU. 🇺🇸", away:"Australia 🇦🇺", group:"D", result:null }, { id:"j2g06", home:"Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿", away:"Marruecos 🇲🇦", group:"C", result:null },
+    { id:"j2g07", home:"Brasil 🇧🇷", away:"Haití 🇭🇹", group:"C", result:null }, { id:"j2g08", home:"Turquía 🇹🇷", away:"Paraguay 🇵🇾", group:"D", result:null },
+    { id:"j2g09", home:"Países Bajos 🇳🇱", away:"Suecia 🇸🇪", group:"F", result:null }, { id:"j2g10", home:"Alemania 🇩🇪", away:"Costa de Marfil 🇨🇮", group:"E", result:null },
+    { id:"j2g11", home:"Ecuador 🇪🇨", away:"Curazao 🇨🇼", group:"E", result:null }, { id:"j2g12", home:"Túnez 🇹🇳", away:"Japón 🇯🇵", group:"F", result:null },
+    { id:"j2g13", home:"España 🇪🇸", away:"Arabia Saudita 🇸🇦", group:"H", result:null }, { id:"j2g14", home:"Bélgica 🇧🇪", away:"Irán 🇮🇷", group:"G", result:null },
+    { id:"j2g15", home:"Uruguay 🇺🇾", away:"Cabo Verde 🇨🇻", group:"H", result:null }, { id:"j2g16", home:"Nueva Zelanda 🇳🇿", away:"Egipto 🇪🇬", group:"G", result:null },
+    { id:"j2g17", home:"Argentina 🇦🇷", away:"Austria 🇦🇹", group:"J", result:null }, { id:"j2g18", home:"Francia 🇫🇷", away:"Irak 🇮🇶", group:"I", result:null },
+    { id:"j2g19", home:"Noruega 🇳🇴", away:"Senegal 🇸🇳", group:"I", result:null }, { id:"j2g20", home:"Jordania 🇯🇴", away:"Argelia 🇩🇿", group:"J", result:null },
+    { id:"j2g21", home:"Portugal 🇵🇹", away:"Uzbekistán 🇺🇿", group:"K", result:null }, { id:"j2g22", home:"Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", away:"Ghana 🇬🇭", group:"L", result:null },
+    { id:"j2g23", home:"Panamá 🇵🇦", away:"Croacia 🇭🇷", group:"L", result:null }, { id:"j2g24", home:"Colombia 🇨🇴", away:"Congo RD 🇨🇩", group:"K", result:null }
+  ] },
+  { label: "Jornada 3 · 24–27 Jun", games: [
+    { id:"j3g01", home:"Suiza 🇨🇭", away:"Canadá 🇨🇦", group:"B", result:null }, { id:"j3g02", home:"Bosnia y Herzegovina 🇧🇦", away:"Catar 🇶🇦", group:"B", result:null },
+    { id:"j3g03", home:"Marruecos 🇲🇦", away:"Haití 🇭🇹", group:"C", result:null }, { id:"j3g04", home:"Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿", away:"Brasil 🇧🇷", group:"C", result:null },
+    { id:"j3g05", home:"Sudáfrica 🇿🇦", away:"Corea del Sur 🇰🇷", group:"A", result:null }, { id:"j3g06", home:"Chequia 🇨🇿", away:"México 🇲🇽", group:"A", result:null },
+    { id:"j3g07", home:"Curazao 🇨🇼", away:"Costa de Marfil 🇨🇮", group:"E", result:null }, { id:"j3g08", home:"Ecuador 🇪🇨", away:"Alemania 🇩🇪", group:"E", result:null },
+    { id:"j3g09", home:"Túnez 🇹🇳", away:"Países Bajos 🇳🇱", group:"F", result:null }, { id:"j3g10", home:"Japón 🇯🇵", away:"Suecia 🇸🇪", group:"F", result:null },
+    { id:"j3g11", home:"Turquía 🇹🇷", away:"EE.UU. 🇺🇸", group:"D", result:null }, { id:"j3g12", home:"Paraguay 🇵🇾", away:"Australia 🇦🇺", group:"D", result:null },
+    { id:"j3g13", home:"Noruega 🇳🇴", away:"Francia 🇫🇷", group:"I", result:null }, { id:"j3g14", home:"Senegal 🇸🇳", away:"Irak 🇮🇶", group:"I", result:null },
+    { id:"j3g15", home:"Cabo Verde 🇨🇻", away:"Arabia Saudita 🇸🇦", group:"H", result:null }, { id:"j3g16", home:"Uruguay 🇺🇾", away:"España 🇪🇸", group:"H", result:null },
+    { id:"j3g17", home:"Nueva Zelanda 🇳🇿", away:"Bélgica 🇧🇪", group:"G", result:null }, { id:"j3g18", home:"Egipto 🇪🇬", away:"Irán 🇮🇷", group:"G", result:null },
+    { id:"j3g19", home:"Panamá 🇵🇦", away:"Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", group:"L", result:null }, { id:"j3g20", home:"Croacia 🇭🇷", away:"Ghana 🇬🇭", group:"L", result:null },
+    { id:"j3g21", home:"Colombia 🇨🇴", away:"Portugal 🇵🇹", group:"K", result:null }, { id:"j3g22", home:"Congo RD 🇨🇩", away:"Uzbekistán 🇺🇿", group:"K", result:null },
+    { id:"j3g23", home:"Argelia 🇩🇿", away:"Austria 🇦🇹", group:"J", result:null }, { id:"j3g24", home:"Jordania 🇯🇴", away:"Argentina 🇦🇷", group:"J", result:null }
+  ] }
+];// ============================================================
+// PREDICCIONES COMPLETAS (Jornada 1, 2 y 3)
+// ============================================================
+const PREDICTIONS_DATA = {
+  // ========== JORNADA 1 (24 partidos) ==========
+  j1g01: { Cristina:"L", Consuelo:"E", Noe:"V", Jessica:"E", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"V", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g02: { Cristina:"L", Consuelo:"E", Noe:"L", Jessica:"E", David:"V", Diana:"V", Julio:"E", Luis:"L", "Jose D":"E", Patron:"V", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"E", Miros:"L", Nacho:"E", Tony:"E", Speedy:"E", "Carlos G":"L", "Miguel C":"L", "Miguel R":"E", Maria:"L", Miguelito:"E", Bryan:"L" },
+  j1g03: { Cristina:"V", Consuelo:"L", Noe:"E", Jessica:"L", David:"V", Diana:"V", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"E", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"V", Nacho:"L", Tony:"V", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"V", Miguelito:"L", Bryan:"L" },
+  j1g04: { Cristina:"L", Consuelo:"E", Noe:"E", Jessica:"V", David:"E", Diana:"V", Julio:"L", Luis:"V", "Jose D":"E", Patron:"E", "Julio Jr":"L", Andres:"V", Jorge:"V", Papa:"L", KJ:"L", Yuny:"L", Miros:"V", Nacho:"V", Tony:"E", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"E", Maria:"L", Miguelito:"V", Bryan:"L" },
+  j1g05: { Cristina:"L", Consuelo:"L", Noe:"E", Jessica:"V", David:"V", Diana:"V", Julio:"V", Luis:"V", "Jose D":"V", Patron:"V", "Julio Jr":"V", Andres:"V", Jorge:"L", Papa:"V", KJ:"V", Yuny:"V", Miros:"L", Nacho:"V", Tony:"V", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"E", Maria:"L", Miguelito:"E", Bryan:"V" },
+  j1g06: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"E", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"V", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g07: { Cristina:"L", Consuelo:"V", Noe:"E", Jessica:"E", David:"V", Diana:"E", Julio:"E", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"L", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"V", Speedy:"E", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", Maria:"V", Miguelito:"E", Bryan:"V" },
+  j1g08: { Cristina:"V", Consuelo:"L", Noe:"E", Jessica:"V", David:"E", Diana:"V", Julio:"L", Luis:"L", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"L", KJ:"E", Yuny:"E", Miros:"V", Nacho:"E", Tony:"L", Speedy:"V", "Carlos G":"L", "Miguel C":"V", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"E" },
+  j1g09: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"E", David:"L", Diana:"L", Julio:"E", Luis:"L", "Jose D":"L", Patron:"E", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"V", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g10: { Cristina:"V", Consuelo:"L", Noe:"L", Jessica:"V", David:"V", Diana:"L", Julio:"V", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"V", KJ:"L", Yuny:"L", Miros:"E", Nacho:"E", Tony:"L", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", Maria:"E", Miguelito:"V", Bryan:"L" },
+  j1g11: { Cristina:"V", Consuelo:"V", Noe:"L", Jessica:"E", David:"E", Diana:"V", Julio:"L", Luis:"V", "Jose D":"V", Patron:"V", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"E", Miros:"V", Nacho:"V", Tony:"E", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"E", Maria:"V", Miguelito:"E", Bryan:"L" },
+  j1g12: { Cristina:"L", Consuelo:"E", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"E", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"E" },
+  j1g13: { Cristina:"E", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"E", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g14: { Cristina:"V", Consuelo:"L", Noe:"V", Jessica:"V", David:"L", Diana:"L", Julio:"V", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"V", Papa:"L", KJ:"L", Yuny:"L", Miros:"E", Nacho:"L", Tony:"L", Speedy:"E", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g15: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"E", David:"E", Diana:"V", Julio:"E", Luis:"V", "Jose D":"V", Patron:"E", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"L", Speedy:"V", "Carlos G":"L", "Miguel C":"L", "Miguel R":"V", Maria:"V", Miguelito:"V", Bryan:"V" },
+  j1g16: { Cristina:"V", Consuelo:"V", Noe:"L", Jessica:"E", David:"E", Diana:"L", Julio:"L", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"E", Andres:"V", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"E", "Carlos G":"E", "Miguel C":"V", "Miguel R":"E", Maria:"E", Miguelito:"E", Bryan:"L" },
+  j1g17: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g18: { Cristina:"V", Consuelo:"L", Noe:"L", Jessica:"V", David:"E", Diana:"V", Julio:"L", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"L", Speedy:"E", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", Maria:"V", Miguelito:"V", Bryan:"V" },
+  j1g19: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g20: { Cristina:"L", Consuelo:"E", Noe:"L", Jessica:"V", David:"V", Diana:"E", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"E", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"E", Speedy:"E", "Carlos G":"E", "Miguel C":"V", "Miguel R":"L", Maria:"L", Miguelito:"E", Bryan:"E" },
+  j1g21: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"V", Diana:"L", Julio:"E", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", Maria:"L", Miguelito:"L", Bryan:"L" },
+  j1g22: { Cristina:"V", Consuelo:"L", Noe:"V", Jessica:"E", David:"L", Diana:"L", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"E", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"E", Tony:"E", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"E", Maria:"E", Miguelito:"V", Bryan:"L" },
+  j1g23: { Cristina:"V", Consuelo:"L", Noe:"V", Jessica:"L", David:"V", Diana:"E", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"V", Papa:"L", KJ:"L", Yuny:"E", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"V", "Miguel R":"L", Maria:"L", Miguelito:"V", Bryan:"V" },
+  j1g24: { Cristina:"V", Consuelo:"E", Noe:"E", Jessica:"L", David:"V", Diana:"V", Julio:"V", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"L", Nacho:"V", Tony:"L", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", Maria:"L", Miguelito:"V", Bryan:"V" },
+
+  // ========== JORNADA 2 (24 partidos) ==========
+  j2g01: { Cristina:"V", Consuelo:"V", Noe:"V", Jessica:"E", David:"L", Diana:"V", Julio:"V", Luis:"V", "Jose D":"E", Patron:"L", "Julio Jr":"L", Andres:"E", Jorge:"E", Papa:"V", KJ:"L", Yuny:"L", Miros:"E", Nacho:"L", Tony:"L", Speedy:"E", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"V" },
+  j2g02: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"V", David:"L", Diana:"E", Julio:"L", Luis:"L", "Jose D":"L", Patron:"E", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"E", Tony:"E", Speedy:"E", "Carlos G":"L", "Miguel C":"L", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"L" },
+  j2g03: { Cristina:"V", Consuelo:"L", Noe:"L", Jessica:"E", David:"E", Diana:"V", Julio:"L", Luis:"L", "Jose D":"L", Patron:"V", "Julio Jr":"E", Andres:"E", Jorge:"E", Papa:"V", KJ:"E", Yuny:"L", Miros:"L", Nacho:"L", Tony:"V", Speedy:"L", "Carlos G":"L", "Miguel C":"V", "Miguel R":"L", "Miguelito":"L", Maria:"V", Bryan:"L" },
+  j2g04: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"E", Luis:"V", "Jose D":"L", Patron:"L", "Julio Jr":"E", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"E", Miros:"V", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g05: { Cristina:"L", Consuelo:"L", Noe:"E", Jessica:"V", David:"L", Diana:"E", Julio:"L", Luis:"V", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", "Miguelito":"E", Maria:"L", Bryan:"L" },
+  j2g06: { Cristina:"V", Consuelo:"V", Noe:"V", Jessica:"E", David:"E", Diana:"V", Julio:"L", Luis:"V", "Jose D":"V", Patron:"V", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"L", KJ:"V", Yuny:"E", Miros:"L", Nacho:"E", Tony:"E", Speedy:"V", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"E", Bryan:"V" },
+  j2g07: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"E", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g08: { Cristina:"E", Consuelo:"V", Noe:"V", Jessica:"E", David:"V", Diana:"V", Julio:"V", Luis:"V", "Jose D":"E", Patron:"V", "Julio Jr":"L", Andres:"V", Jorge:"V", Papa:"V", KJ:"L", Yuny:"L", Miros:"V", Nacho:"V", Tony:"V", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"L" },
+  j2g09: { Cristina:"V", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"E", Tony:"E", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g10: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"E", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g11: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"E", David:"E", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"E", Bryan:"L" },
+  j2g12: { Cristina:"V", Consuelo:"L", Noe:"V", Jessica:"L", David:"V", Diana:"V", Julio:"V", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"L", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"V", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j2g13: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"E", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g14: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"E", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"E", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g15: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"E", David:"E", Diana:"L", Julio:"L", Luis:"L", "Jose D":"V", Patron:"E", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g16: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"V", Diana:"L", Julio:"L", Luis:"L", "Jose D":"E", Patron:"V", "Julio Jr":"V", Andres:"L", Jorge:"E", Papa:"L", KJ:"V", Yuny:"V", Miros:"L", Nacho:"E", Tony:"E", Speedy:"V", "Carlos G":"L", "Miguel C":"L", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"V" },
+  j2g17: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g18: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g19: { Cristina:"L", Consuelo:"E", Noe:"V", Jessica:"L", David:"E", Diana:"E", Julio:"V", Luis:"V", "Jose D":"E", Patron:"L", "Julio Jr":"E", Andres:"L", Jorge:"E", Papa:"V", KJ:"L", Yuny:"L", Miros:"V", Nacho:"L", Tony:"E", Speedy:"E", "Carlos G":"E", "Miguel C":"L", "Miguel R":"E", "Miguelito":"E", Maria:"E", Bryan:"L" },
+  j2g20: { Cristina:"V", Consuelo:"E", Noe:"V", Jessica:"E", David:"L", Diana:"V", Julio:"V", Luis:"V", "Jose D":"E", Patron:"V", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"L", KJ:"V", Yuny:"E", Miros:"V", Nacho:"E", Tony:"V", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"L", "Miguelito":"E", Maria:"E", Bryan:"E" },
+  j2g21: { Cristina:"E", Consuelo:"L", Noe:"L", Jessica:"V", David:"E", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"V", Miros:"L", Nacho:"V", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j2g22: { Cristina:"V", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"E", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"E", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"L", "Miguelito":"V", Maria:"L", Bryan:"L" },
+  j2g23: { Cristina:"V", Consuelo:"E", Noe:"V", Jessica:"L", David:"V", Diana:"L", Julio:"E", Luis:"V", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"L", Papa:"L", KJ:"V", Yuny:"L", Miros:"V", Nacho:"V", Tony:"V", Speedy:"V", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"L", Maria:"V", Bryan:"V" },
+  j2g24: { Cristina:"L", Consuelo:"L", Noe:"E", Jessica:"L", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+
+  // ========== JORNADA 3 (24 partidos) ==========
+  j3g01: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"L", David:"L", Diana:"E", Julio:"V", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"V", Papa:"L", KJ:"L", Yuny:"E", Miros:"E", Nacho:"E", Tony:"L", Speedy:"V", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"L" },
+  j3g02: { Cristina:"V", Consuelo:"V", Noe:"L", Jessica:"L", David:"L", Diana:"L", Julio:"E", Luis:"L", "Jose D":"E", Patron:"E", "Julio Jr":"L", Andres:"E", Jorge:"V", Papa:"V", KJ:"L", Yuny:"L", Miros:"V", Nacho:"E", Tony:"L", Speedy:"E", "Carlos G":"L", "Miguel C":"V", "Miguel R":"E", "Miguelito":"E", Maria:"V", Bryan:"L" },
+  j3g03: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"L", David:"L", Diana:"V", Julio:"V", Luis:"V", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"V", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j3g04: { Cristina:"L", Consuelo:"V", Noe:"V", Jessica:"L", David:"V", Diana:"V", Julio:"V", Luis:"V", "Jose D":"V", Patron:"V", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"L", Miros:"V", Nacho:"E", Tony:"V", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g05: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"L", Papa:"V", KJ:"V", Yuny:"V", Miros:"L", Nacho:"E", Tony:"V", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"L", "Miguelito":"L", Maria:"E", Bryan:"E" },
+  j3g06: { Cristina:"V", Consuelo:"V", Noe:"V", Jessica:"V", David:"V", Diana:"V", Julio:"V", Luis:"L", "Jose D":"V", Patron:"E", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"V", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"V" },
+  j3g07: { Cristina:"E", Consuelo:"V", Noe:"L", Jessica:"L", David:"V", Diana:"E", Julio:"L", Luis:"V", "Jose D":"V", Patron:"V", "Julio Jr":"V", Andres:"E", Jorge:"L", Papa:"L", KJ:"V", Yuny:"V", Miros:"L", Nacho:"E", Tony:"V", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"E", Bryan:"V" },
+  j3g08: { Cristina:"L", Consuelo:"V", Noe:"L", Jessica:"E", David:"V", Diana:"L", Julio:"V", Luis:"L", "Jose D":"E", Patron:"L", "Julio Jr":"E", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"E", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g09: { Cristina:"L", Consuelo:"E", Noe:"L", Jessica:"V", David:"E", Diana:"V", Julio:"V", Luis:"L", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"V", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"E", Maria:"V", Bryan:"V" },
+  j3g10: { Cristina:"L", Consuelo:"L", Noe:"E", Jessica:"V", David:"L", Diana:"L", Julio:"V", Luis:"L", "Jose D":"E", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"E", Miros:"L", Nacho:"E", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"V", Bryan:"E" },
+  j3g11: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"V", David:"E", Diana:"V", Julio:"V", Luis:"V", "Jose D":"V", Patron:"E", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"V", Yuny:"L", Miros:"V", Nacho:"E", Tony:"L", Speedy:"V", "Carlos G":"E", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"L", Bryan:"E" },
+  j3g12: { Cristina:"E", Consuelo:"L", Noe:"V", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"V", "Jose D":"L", Patron:"V", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"V", "Miguelito":"L", Maria:"V", Bryan:"L" },
+  j3g13: { Cristina:"E", Consuelo:"E", Noe:"V", Jessica:"V", David:"V", Diana:"V", Julio:"V", Luis:"L", "Jose D":"V", Patron:"E", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"V", Speedy:"L", "Carlos G":"V", "Miguel C":"L", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g14: { Cristina:"V", Consuelo:"V", Noe:"L", Jessica:"V", David:"L", Diana:"E", Julio:"L", Luis:"V", "Jose D":"E", Patron:"V", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"V", KJ:"L", Yuny:"E", Miros:"L", Nacho:"L", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"V", Bryan:"L" },
+  j3g15: { Cristina:"V", Consuelo:"E", Noe:"L", Jessica:"V", David:"L", Diana:"E", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"L", Speedy:"E", "Carlos G":"E", "Miguel C":"V", "Miguel R":"E", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g16: { Cristina:"L", Consuelo:"E", Noe:"E", Jessica:"L", David:"V", Diana:"V", Julio:"V", Luis:"L", "Jose D":"E", Patron:"V", "Julio Jr":"E", Andres:"V", Jorge:"L", Papa:"V", KJ:"V", Yuny:"E", Miros:"V", Nacho:"E", Tony:"E", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g17: { Cristina:"V", Consuelo:"E", Noe:"V", Jessica:"V", David:"V", Diana:"V", Julio:"L", Luis:"E", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"E", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"E", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g18: { Cristina:"L", Consuelo:"V", Noe:"V", Jessica:"V", David:"L", Diana:"V", Julio:"L", Luis:"E", "Jose D":"E", Patron:"V", "Julio Jr":"L", Andres:"L", Jorge:"L", Papa:"L", KJ:"L", Yuny:"L", Miros:"E", Nacho:"E", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"E", Maria:"L", Bryan:"L" },
+  j3g19: { Cristina:"L", Consuelo:"V", Noe:"L", Jessica:"L", David:"V", Diana:"V", Julio:"V", Luis:"L", "Jose D":"V", Patron:"L", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"L", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" },
+  j3g20: { Cristina:"L", Consuelo:"L", Noe:"L", Jessica:"V", David:"L", Diana:"L", Julio:"L", Luis:"L", "Jose D":"L", Patron:"L", "Julio Jr":"L", Andres:"L", Jorge:"V", Papa:"L", KJ:"L", Yuny:"L", Miros:"L", Nacho:"E", Tony:"L", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"L", "Miguelito":"L", Maria:"L", Bryan:"L" },
+  j3g21: { Cristina:"L", Consuelo:"V", Noe:"V", Jessica:"L", David:"L", Diana:"V", Julio:"V", Luis:"V", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"L", Jorge:"V", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"E", Speedy:"V", "Carlos G":"L", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"E" },
+  j3g22: { Cristina:"L", Consuelo:"L", Noe:"V", Jessica:"L", David:"E", Diana:"V", Julio:"L", Luis:"V", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"L", Jorge:"E", Papa:"L", KJ:"L", Yuny:"L", Miros:"E", Nacho:"V", Tony:"V", Speedy:"L", "Carlos G":"L", "Miguel C":"L", "Miguel R":"E", "Miguelito":"E", Maria:"V", Bryan:"L" },
+  j3g23: { Cristina:"V", Consuelo:"V", Noe:"V", Jessica:"L", David:"L", Diana:"V", Julio:"L", Luis:"V", "Jose D":"E", Patron:"L", "Julio Jr":"V", Andres:"L", Jorge:"L", Papa:"V", KJ:"V", Yuny:"V", Miros:"V", Nacho:"E", Tony:"V", Speedy:"L", "Carlos G":"E", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"L" },
+  j3g24: { Cristina:"L", Consuelo:"E", Noe:"L", Jessica:"V", David:"V", Diana:"V", Julio:"V", Luis:"L", "Jose D":"V", Patron:"E", "Julio Jr":"V", Andres:"V", Jorge:"V", Papa:"L", KJ:"V", Yuny:"V", Miros:"V", Nacho:"V", Tony:"L", Speedy:"V", "Carlos G":"V", "Miguel C":"V", "Miguel R":"V", "Miguelito":"V", Maria:"V", Bryan:"V" }
+};const PARTICIPANT_NAMES = ["Cristina","Consuelo","Noe","Jessica","David","Diana","Julio","Luis","Jose D","Patron","Julio Jr","Andres","Jorge","Papa","KJ","Yuny","Miros","Nacho","Tony","Speedy","Carlos G","Miguel C","Miguel R","Maria","Miguelito","Bryan"];
+const PARTICIPANT_COLORS = { Cristina:"#ec4899", Consuelo:"#f97316", Noe:"#3b82f6", Jessica:"#a855f7", David:"#10b981", Diana:"#f43f5e", Julio:"#eab308", Luis:"#06b6d4", "Jose D":"#8b5cf6", Patron:"#84cc16", "Julio Jr":"#fb923c", Andres:"#14b8a6", Jorge:"#ef4444", Papa:"#f59e0b", KJ:"#6366f1", Yuny:"#d946ef", Miros:"#0ea5e9", Nacho:"#f472b6", Tony:"#22d3ee", Speedy:"#a3e635", "Carlos G":"#34d399", "Miguel C":"#fb7185", "Miguel R":"#818cf8", Maria:"#f0abfc", Miguelito:"#c084fc", Bryan:"#38bdf8" };
+
+let currentView = "cards";
+let searchVal = "";
+let selectedJornada = "all";
+
+function getGames() {
+  return JORNADAS.flatMap((j, idx) => j.games.map(g => ({ ...g, jornada: j.label, jornadaIdx: idx })));
+}
+
+function getParticipants() {
+  return PARTICIPANT_NAMES.map(name => {
+    const predictions = {};
+    for (const [gameId, picks] of Object.entries(PREDICTIONS_DATA)) {
+      if (picks[name] !== undefined) predictions[gameId] = picks[name];
+    }
+    return { name, color: PARTICIPANT_COLORS[name], predictions };
+  });
+}
+
+function calcPoints(p) {
+  let pts=0, correct=0, wrong=0, pending=0;
+  const games = getGames();
+  games.forEach(g => {
+    const pick = p.predictions[g.id];
+    if (!pick) { pending++; return; }
+    if (g.result === null) { pending++; return; }
+    if (pick === g.result) { pts++; correct++; } else wrong++;
+  });
+  return { pts, correct, wrong, pending };
+}
+
+function computeRankings() {
+  const scored = getParticipants().map(p => ({ ...p, ...calcPoints(p) }));
+  scored.sort((a,b) => b.pts - a.pts || b.correct - a.correct);
+  
+  let rank = 1;
+  for (let i = 0; i < scored.length; i++) {
+    if (i > 0 && scored[i].pts === scored[i-1].pts && scored[i].correct === scored[i-1].correct) {
+      scored[i].rank = scored[i-1].rank;
+    } else {
+      scored[i].rank = rank;
+    }
+    rank++;
+  }
+  return scored;
+}
+
+function initials(n){ return n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2); }
+function labelFor(c){ if(!c) return "—"; return c==="L"?"🏠 Local":c==="E"?"🤝 Empate":"✈️ Visita"; }
+function rankBgClass(r){ return r===1?"gold-row":r===2?"silver-row":r===3?"bronze-row":"other-row"; }
+
+function renderPodium() {
+  const ranked = computeRankings();
+  document.getElementById("podiumList").innerHTML = ranked.slice(0,3).map(p => {
+    return `
+    <div class="podium-row ${rankBgClass(p.rank)}" onclick="openModal('${p.name}')">
+      <span class="podium-rank">${p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : ''}</span>
+      <div class="podium-avatar" style="background:${p.color}22;color:${p.color};border-color:${p.color}55">${initials(p.name)}</div>
+      <div class="podium-info"><div class="podium-name">${p.name}</div><div class="podium-pts">✅ ${p.correct} aciertos · ⏳ ${p.pending} pend.</div></div>
+      <span class="podium-badge ${p.rank===1?"gold-badge":p.rank===2?"silver-badge":"bronze-badge"}">${p.pts} pts</span>
+    </div>`;
+  }).join("");
+  
+  const games = getGames();
+  const played = games.filter(g => g.result !== null).length;
+  document.getElementById("gamesPlayed").innerHTML = `${played}/${games.length} jugados`;
+}
+
+function renderCards() {
+  const ranked = computeRankings();
+  let list = [...ranked];
+  if (searchVal) list = list.filter(p => p.name.toLowerCase().includes(searchVal.toLowerCase()));
+  const container = document.getElementById("cardsList");
+  const noRes = document.getElementById("noResults");
+  if(!list.length){ container.innerHTML=""; noRes.style.display="block"; return; }
+  noRes.style.display="none";
+  container.innerHTML = list.map(p => `
+    <div class="player-card" onclick="openModal('${p.name}')">
+      <div class="rank-num${p.rank<=3?" top3":""}">${p.rank}</div>
+      <div class="avatar" style="background:${p.color}22;color:${p.color};border-color:${p.color}55">${initials(p.name)}</div>
+      <div class="card-info">
+        <div class="card-name">${p.name}</div>
+        <div class="card-sub">✅ ${p.correct} aciertos &nbsp;❌ ${p.wrong} fallos &nbsp;⏳ ${p.pending}</div>
+        <button class="view-btn" onclick="event.stopPropagation();openModal('${p.name}')"><i class="ti ti-eye"></i> Ver predicciones</button>
+      </div>
+      <div class="card-right"><div class="pts-big">${p.pts}</div><div class="pts-label">pts</div></div>
+    </div>`).join("");
+}
+
+function renderTable() {
+  const ranked = computeRankings();
+  let list = [...ranked];
+  if (searchVal) list = list.filter(p => p.name.toLowerCase().includes(searchVal.toLowerCase()));
+  const container = document.getElementById("tableView");
+  const noRes = document.getElementById("noResults");
+  if(!list.length){ container.innerHTML=""; noRes.style.display="block"; return; }
+  noRes.style.display="none";
+  let html = `<table class="standings-table"><thead><tr><th>#</th><th>Participante</th><th>✅</th><th>❌</th><th>⏳</th><th>Pts</th></tr></thead><tbody>`;
+  list.forEach(p => {
+    let rowClass = "";
+    if(p.rank===1) rowClass="table-rank-1";
+    else if(p.rank===2) rowClass="table-rank-2";
+    else if(p.rank===3) rowClass="table-rank-3";
+    html += `<tr class="${rowClass}" onclick="openModal('${p.name}')">
+      <td>${p.rank}</td>
+      <td style="text-align:left">${p.name}</td>
+      <td>${p.correct}</td><td>${p.wrong}</td><td>${p.pending}</td>
+      <td class="table-pts">${p.pts}</td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
+
+function renderMatrix() {
+  const ranked = computeRankings();
+  let filtered = [...ranked];
+  if (searchVal) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal.toLowerCase()));
+  const container = document.getElementById("matrixView");
+  const noRes = document.getElementById("noResults");
+  if(!filtered.length){ container.innerHTML=""; noRes.style.display="block"; return; }
+  noRes.style.display="none";
+  
+  let games = getGames();
+  if (selectedJornada !== "all") {
+    games = games.filter(g => g.jornadaIdx === parseInt(selectedJornada));
+  }
+  
+  let html = `<div class="legend">
+    <span><div class="box" style="background:#22c55e60;"></div> 🟢 Local (L)</span>
+    <span><div class="box" style="background:#eab30860;"></div> 🟡 Empate (E)</span>
+    <span><div class="box" style="background:#f9731660;"></div> 🟠 Visita (V)</span>
+    <span><div class="box" style="background:rgba(255,255,255,0.2);"></div> ⚪ Sin predicción</span>
+  </div>
+  <div class="matrix-wrapper">
+    <div class="scroll-hint">← desliza para ver más →</div>
+    <table class="matrix-table"><thead><tr><th class="sticky-col">Participante</th>`;
+  games.forEach(m => {
+    html += `<th title="${m.home} vs ${m.away} (Grupo ${m.group})">${m.home} vs ${m.away}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+  filtered.forEach(p => {
+    html += `<tr class="participant-row" onclick="openModal('${p.name}')"><td class="sticky-col">${p.name}</td>`;
+    games.forEach(m => {
+      const pred = p.predictions[m.id];
+      let cellClass = "matrix-pred-none", cellText = "—";
+      if(pred === "L") { cellClass = "matrix-pred-L"; cellText = "L"; }
+      else if(pred === "E") { cellClass = "matrix-pred-E"; cellText = "E"; }
+      else if(pred === "V") { cellClass = "matrix-pred-V"; cellText = "V"; }
+      html += `<td class="${cellClass}">${cellText}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div>`;
+  container.innerHTML = html;
+}
+
+function renderAll() {
+  renderPodium();
+  if(currentView === "cards") renderCards();
+  else if(currentView === "table") renderTable();
+  else if(currentView === "matrix") renderMatrix();
+}
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll("[data-view]").forEach(b => b.classList.remove("active"));
+  document.querySelector(`[data-view="${view}"]`)?.classList.add("active");
+  
+  const jornadaFilters = document.getElementById("jornadaFilters");
+  if (view === "matrix") {
+    jornadaFilters.style.display = "flex";
+  } else {
+    jornadaFilters.style.display = "none";
+  }
+  
+  const cardsDiv = document.getElementById("cardsList");
+  const tableDiv = document.getElementById("tableView");
+  const matrixDiv = document.getElementById("matrixView");
+  cardsDiv.style.display = view==="cards" ? "block" : "none";
+  tableDiv.style.display = view==="table" ? "block" : "none";
+  matrixDiv.style.display = view==="matrix" ? "block" : "none";
+  renderAll();
+}
+
+function openModal(name) {
+  const ranked = computeRankings();
+  const p = ranked.find(x => x.name === name);
+  if(!p) return;
+  
+  const av = document.getElementById("modalAvatar");
+  av.style.background = p.color+"33"; av.style.color=p.color; av.textContent=initials(p.name);
+  document.getElementById("modalName").innerHTML = `${p.rank}. ${p.name}`;
+  document.getElementById("modalSub").innerHTML = `Posición ${p.rank} de ${ranked.length} · ${p.correct} aciertos`;
+  document.getElementById("modalStats").innerHTML = `
+    <div class="stat-box"><div class="stat-num" style="color:#4ade80">${p.correct}</div><div class="stat-lbl">Aciertos</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:#f87171">${p.wrong}</div><div class="stat-lbl">Fallos</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:#facc15">${p.pts}</div><div class="stat-lbl">Puntos</div></div>`;
+  
+  let html = "";
+  JORNADAS.forEach((j, idx) => {
+    const isCurrent = idx === 1;
+    html += `<div class="jornada-title${isCurrent ? ' current' : ''}">${j.label}${isCurrent ? ' 🔴 EN CURSO' : ''}</div>`;
+    j.games.forEach(g => {
+      const pick = p.predictions[g.id]||null;
+      let pickClass="pick-pending", resBadge="";
+      if(g.result && pick){ pickClass=pick===g.result?"pick-correct":"pick-wrong"; resBadge=pick===g.result?`<span class="result-badge res-correct">✅ Acierto</span>`:`<span class="result-badge res-wrong">❌ Fallo</span>`; }
+      else if(!g.result) resBadge=`<span class="result-badge res-pending">⏳ Pendiente</span>`;
+      else if(!pick) resBadge=`<span class="result-badge res-pending">❓ Sin predicción</span>`;
+      html += `<div class="game-row"><div class="game-teams">${g.home} vs ${g.away} <span class="group-badge">Grupo ${g.group}</span></div>
+        <div class="game-picks">
+          <div><div class="pick-label">Tu predicción</div><div class="pick-val ${pickClass}">${labelFor(pick)}</div></div>
+          <div><div class="pick-label">Resultado real</div><div class="pick-val ${g.result?(pick===g.result?"pick-correct":"pick-wrong"):"pick-pending"}">${labelFor(g.result)}</div></div>
+        </div>${resBadge}</div>`;
+    });
+  });
+  document.getElementById("modalGames").innerHTML = html;
+  document.getElementById("predictionsModal").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("predictionsModal").classList.remove("open");
+}
+
+function populateEditor() {
+  const select = document.getElementById("matchSelect");
+  const games = getGames();
+  select.innerHTML = games.map(g => 
+    `<option value="${g.id}">${g.home} vs ${g.away} (${g.group}) - ${g.result ? labelFor(g.result) : 'Pendiente'}</option>`
+  ).join("");
+}
+
+function updateResult() {
+  const matchId = document.getElementById("matchSelect").value;
+  const result = document.getElementById("resultSelect").value;
+  if (!matchId) return;
+  for (const j of JORNADAS) {
+    for (const g of j.games) {
+      if (g.id === matchId) {
+        if (result === 'clear') { g.result = null; } 
+        else if (result) { g.result = result; }
+        break;
+      }
+    }
+  }
+  renderAll();
+  populateEditor();
+  document.getElementById("resultSelect").value = "";
+}
+
+function exportPDF() {
+  const ranked = computeRankings();
+  const games = getGames();
+  const played = games.filter(g => g.result !== null).length;
+  let html = `
+    <div style="font-family:Arial,sans-serif;padding:20px;background:#0a1628;color:#fff;max-width:800px;margin:0 auto;">
+      <h1 style="color:#e8c547;text-align:center;">⚽ Quiniela Mundial 2026</h1>
+      <p style="text-align:center;color:#aaa;">Fase de Grupos · ${played}/${games.length} partidos jugados</p>
+      <hr style="border-color:#333;margin:16px 0;">
+      <h2 style="color:#e8c547;">🏆 Clasificación</h2>
+      <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;">
+        <thead><tr style="background:#1a3a5c;"><th style="padding:8px;text-align:center;color:#e8c547;">#</th><th style="padding:8px;text-align:left;color:#e8c547;">Participante</th><th style="padding:8px;text-align:center;color:#e8c547;">✅</th><th style="padding:8px;text-align:center;color:#e8c547;">❌</th><th style="padding:8px;text-align:center;color:#e8c547;">⏳</th><th style="padding:8px;text-align:center;color:#e8c547;">Pts</th></tr></thead><tbody>`;
+  ranked.forEach(p => {
+    html += `<tr style="border-bottom:1px solid #333;"><td style="padding:6px;text-align:center;">${p.rank}</td><td style="padding:6px;text-align:left;">${p.name}</td><td style="padding:6px;text-align:center;">${p.correct}</td><td style="padding:6px;text-align:center;">${p.wrong}</td><td style="padding:6px;text-align:center;">${p.pending}</td><td style="padding:6px;text-align:center;font-weight:bold;color:#e8c547;">${p.pts}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.print();
+}
+
+// ============================================================
+// EVENTOS
+// ============================================================
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", function() {
+    setView(this.dataset.view);
+  });
+});
+
+document.querySelectorAll("[data-jornada]").forEach(btn => {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll("[data-jornada]").forEach(b => b.classList.remove("active"));
+    this.classList.add("active");
+    selectedJornada = this.dataset.jornada;
+    renderMatrix();
+  });
+});
+
+document.getElementById("searchInput").addEventListener("input", function() {
+  searchVal = this.value.toLowerCase();
+  renderAll();
+});
+
+document.getElementById("podiumToggleBtn").addEventListener("click", function() {
+  const body = document.getElementById("podiumBody");
+  const chevron = document.getElementById("podiumChevron");
+  body.classList.toggle("open");
+  chevron.style.transform = body.classList.contains("open") ? "" : "rotate(-90deg)";
+});
+
+document.getElementById("fullPodiumBtn").addEventListener("click", function() {
+  const ranked = computeRankings();
+  const games = getGames();
+  const played = games.filter(g => g.result !== null).length;
+  document.getElementById("fullPodiumSub").innerHTML = `${ranked.length} participantes · ${played}/${games.length} partidos jugados`;
+  document.getElementById("fullPodiumList").innerHTML = ranked.map(p => {
+    return `<div class="podium-row ${rankBgClass(p.rank)}" onclick="closeFull();openModal('${p.name}')">
+      <span class="podium-rank" style="font-size:${p.rank>3?'16px':'22px'}">${p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : p.rank}</span>
+      <div class="podium-avatar" style="background:${p.color}22;color:${p.color};width:38px;height:38px;font-size:13px">${initials(p.name)}</div>
+      <div class="podium-info"><div class="podium-name" style="font-size:14px">${p.name}</div><div class="podium-pts">✅${p.correct} ❌${p.wrong} ⏳${p.pending}</div></div>
+      <span style="font-size:16px;font-weight:700;color:#e8c547">${p.pts} pts</span>
+    </div>`;
+  }).join("");
+  document.getElementById("fullPodiumModal").classList.add("open");
+});
+
+document.getElementById("fullPodiumClose").addEventListener("click", function() {
+  document.getElementById("fullPodiumModal").classList.remove("open");
+});
+document.getElementById("fullPodiumModal").addEventListener("click", function(e) {
+  if(e.target === this) document.getElementById("fullPodiumModal").classList.remove("open");
+});
+
+document.getElementById("toggleEditorBtn").addEventListener("click", function() {
+  const panel = document.getElementById("editorPanel");
+  panel.classList.toggle("hidden");
+  if (!panel.classList.contains("hidden")) populateEditor();
+});
+document.getElementById("closeEditorBtn").addEventListener("click", function() {
+  document.getElementById("editorPanel").classList.add("hidden");
+});
+document.getElementById("updateResultBtn").addEventListener("click", updateResult);
+
+document.getElementById("exportPdfBtn").addEventListener("click", exportPDF);
+
+document.getElementById("modalClose").addEventListener("click", closeModal);
+document.getElementById("modalCloseBottom").addEventListener("click", closeModal);
+document.getElementById("predictionsModal").addEventListener("click", function(e) {
+  if(e.target === this) closeModal();
+});
+
+function closeFull() {
+  document.getElementById("fullPodiumModal").classList.remove("open");
+}
+
+setView("cards");
+</script>
+</body>
+</html>
